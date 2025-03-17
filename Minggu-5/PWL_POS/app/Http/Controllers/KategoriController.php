@@ -44,4 +44,9 @@ public function update(Request $request, $id)
 
 }
 
+public function delete($id)
+    {
+        KategoriModel::where('kategori_id', $id)->delete();
+        return redirect('/kategori');
+    }
 }
