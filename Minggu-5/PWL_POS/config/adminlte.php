@@ -339,6 +339,11 @@ return [
             'icon' => 'fas fa-fw fa-lock',
         ],
         [
+            'text' => 'Manager Kategori',
+            'url' => 'kategori',
+            'icon' => 'fas fa-list', // menu akan muncul di side bar items
+        ],
+        [
             'text' => 'multilevel',
             'icon' => 'fas fa-fw fa-share',
             'submenu' => [
