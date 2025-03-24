@@ -34,3 +34,28 @@ Route::group(['prefix'=>'user'], function(){
     Route::put('/{id}',[UserController::class,'update']);// menyimpan perubahan data user 
     Route::delete('/{id}',[UserController::class,'destroy']);// menghapus data user 
 });
+
+//Tugas
+// m_level
+Route::group(['prefix' => 'level'], function () {
+    Route::get('/', [LevelController::class, 'index'])->name('level.index'); // Menampilkan daftar level
+    Route::post('/list', [LevelController::class, 'getLevels'])->name('level.list'); // DataTables JSON
+    Route::get('/create', [LevelController::class, 'create'])->name('level.create'); // Form tambah
+    Route::post('/', [LevelController::class, 'store'])->name('level.store'); // Simpan data baru
+    Route::get('/{id}', [LevelController::class, 'show'])->name('level.show'); // Menampilkan detail level
+    Route::get('/{id}/edit', [LevelController::class, 'edit'])->name('level.edit'); // Form edit
+    Route::put('/{id}', [LevelController::class, 'update'])->name('level.update'); // Simpan perubahan
+    Route::delete('/{id}', [LevelController::class, 'destroy'])->name('level.destroy'); // Hapus level
+});
+
+//m_kategori
+Route::group(['prefix'=>'kategori'], function(){
+    Route::get('/',[KategoriController::class,'index']);//menampilkan halaman awal
+    Route::post('/list',[KategoriController::class,'list']);//menampilkan data kategori bentuk json / datatables
+    Route::get('/create',[KategoriController::class,'create']);// meanmpilkan bentuk form untuk tambah kategori
+    Route::post('/',[KategoriController::class,'store']);//menyimpan kategori data baru 
+    Route::get('/{id}',[KategoriController::class,'show']); // menampilkan detail kategori
+    Route::get('/{id}/edit',[KategoriController::class,'edit']);// menampilkan halaman form edit kategori
+    Route::put('/{id}',[KategoriController::class,'update']);// menyimpan perubahan data kategori
+    Route::delete('/{id}',[KategoriController::class,'destroy']);// menghapus data kategori 
+});
