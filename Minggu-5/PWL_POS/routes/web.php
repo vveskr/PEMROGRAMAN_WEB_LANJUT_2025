@@ -5,6 +5,8 @@ use App\Http\Controllers\LevelController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WelcomeController;
+use App\Http\Controllers\BarangController;
+use App\Http\Controllers\SupplierController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -58,4 +60,28 @@ Route::group(['prefix'=>'kategori'], function(){
     Route::get('/{id}/edit',[KategoriController::class,'edit']);// menampilkan halaman form edit kategori
     Route::put('/{id}',[KategoriController::class,'update']);// menyimpan perubahan data kategori
     Route::delete('/{id}',[KategoriController::class,'destroy']);// menghapus data kategori 
+});
+
+// m_supplier
+Route::group(['prefix'=>'supplier'], function(){
+    Route::get('/',[SupplierController::class,'index']);//menampilkan halaman awal
+    Route::post('/list',[SupplierController::class,'list']);//menampilkan data supplier bentuk json / datatables
+    Route::get('/create',[SupplierController::class,'create']);// meanmpilkan bentuk form untuk tambah supplier
+    Route::post('/',[SupplierController::class,'store']);//menyimpan supplier data baru 
+    Route::get('/{id}',[SupplierController::class,'show']); // menampilkan detail supplier
+    Route::get('/{id}/edit',[SupplierController::class,'edit']);// menampilkan halaman form edit supplier
+    Route::put('/{id}',[SupplierController::class,'update']);// menyimpan perubahan data supplier
+    Route::delete('/{id}',[SupplierController::class,'destroy']);// menghapus data supplier 
+});
+
+//m_barang
+Route::group(['prefix'=>'barang'], function(){
+    Route::get('/',[BarangController::class,'index']);//menampilkan halaman awal
+    Route::post('/list',[BarangController::class,'list']);//menampilkan data barang bentuk json / datatables
+    Route::get('/create',[BarangController::class,'create']);// meanmpilkan bentuk form untuk tambah barang
+    Route::post('/',[BarangController::class,'store']);//menyimpan barang data baru 
+    Route::get('/{id}',[BarangController::class,'show']); // menampilkan detail barang
+    Route::get('/{id}/edit',[BarangController::class,'edit']);// menampilkan halaman form edit barang
+    Route::put('/{id}',[BarangController::class,'update']);// menyimpan perubahan data baramg
+    Route::delete('/{id}',[BarangController::class,'destroy']);// menghapus data barang
 });
