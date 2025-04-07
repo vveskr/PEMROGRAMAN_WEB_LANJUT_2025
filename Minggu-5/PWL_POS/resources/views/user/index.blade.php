@@ -92,7 +92,7 @@
                     className: "",
                     orderable: false,
                     searchable: false
-                }]
+                }]data: "level.level_name",
             });
 
             $('#level_id').on('change', function() {

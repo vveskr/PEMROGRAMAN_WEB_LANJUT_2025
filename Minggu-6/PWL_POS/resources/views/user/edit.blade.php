@@ -25,7 +25,7 @@
                         <select class="form-control" id="level_id" name="level_id" required>
                             <option value="">- Pilih Level -</option>
                             @foreach($level as $item)
-                            <option value="{{ $item->level_id }}" @if($item->level_id == $user->level_id) selected @endif>{{ $item->level_nama }}</option>
+                            <option value="{{ $item->level_id }}" @if($item->level_id == $user->level_id) selected @endif>{{ $item->level_name }}</option>
                             @endforeach
                         </select>
                         @error('level_id')

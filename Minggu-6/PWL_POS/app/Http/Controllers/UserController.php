@@ -44,10 +44,11 @@ class UserController extends Controller
         // menambahkan kolom index / no urut (default nama kolom: DT_RowIndex) 
         ->addIndexColumn()  
         ->addColumn('aksi', function ($user) {  // menambahkan kolom aksi 
-            $btn  = '<a href="'.url('/user/' . $user->user_id).'" class="btn btn-info btn sm">Detail</a> '; 
-            $btn .= '<a href="'.url('/user/' . $user->user_id . '/edit').'" class="btn btn warning btn-sm">Edit</a> '; 
-            $btn .= '<form class="d-inline-block" method="POST" action="'. url('/user/'.$user->user_id).'">' . csrf_field() . method_field('DELETE') .  
-                    '<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Apakah Anda yakin menghapus data ini?\');">Hapus</button></form>';      
+            $btn = '<a href="'.url('/user/' . $user->user_id).'" class="btn btn-info btn-sm">Detail</a> ';
+                $btn .= '<a href="'.url('/user/' . $user->user_id . '/edit').'" class="btn btn-warning btn-sm">Edit</a> ';
+                $btn .= '<form class="d-inline-block" method="POST" action="'.url('/user/'.$user->user_id).'">'. 
+                    csrf_field() . method_field('DELETE') . 
+                    '<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Apakah Anda yakin menghapus data ini?\');">Hapus</button></form>';
             return $btn; 
         }) 
         ->rawColumns(['aksi']) // memberitahu bahwa kolom aksi adalah html 
@@ -173,39 +174,48 @@ class UserController extends Controller
 
     public function create_ajax()
     {
-        $level = LevelModel::select('level_id', 'level_nama' )->get();
+        $level = LevelModel::select('level_id', 'level_name' )->get();
 
         return view('user.create_ajax' )
                     ->with('level', $level);
     }
     
-    public function store_ajax(Request $request) {
-        // cek apakah request berupa ajax
-        if($request->ajax() || $request->wantsJson()){
-            $rules = [
-                'level_id' => 'required| integer',
-                'username' => 'required | string | min: 3 | unique: m_user, username',
-                'nama' => 'required | string | max: 100',
-                'password' => 'required | min: 6',
-            ];
+    public function store_ajax(Request $request)
+    {
+        // Buat validasi secara manual
+        $validator = Validator::make($request->all(), [
+            'level_id' => 'required|integer',
+            'username' => 'required|min:3|max:20|unique:m_user,username',
+            'nama' => 'required|min:3|max:100',
+            'password' => 'required|min:6|max:20',
+        ]);
 
-            // use Illuminate\Support\Facades\Validator;
-            $validator = Validator::make($request->all(), $rules);
-
-            if($validator->fails()){
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Validasi Gagal',
-                    'msgField' => $validator->errors()
-                ]);
-            }
-
-            UserModel::create($request->all());
+        // Jika validasi gagal, kembalikan error JSON
+        if ($validator->fails()) {
             return response()->json([
-                'status' => true,
-                'message' => 'Data User Berhasil Disimpan'
+                'status' => false,
+                'message' => 'Validasi gagal!',
+                'msgField' => $validator->errors(),
             ]);
         }
-        redirect('/');
+        try {
+            // Simpan data user
+            $user = new UserModel();
+            $user->level_id = $request->level_id;
+            $user->username = $request->username;
+            $user->nama = $request->nama;
+            $user->password = bcrypt($request->password); // Enkripsi password
+            $user->save();
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Data user berhasil disimpan!',
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Terjadi kesalahan saat menyimpan data: ' . $e->getMessage(),
+            ]);
+        }
     }
 }
