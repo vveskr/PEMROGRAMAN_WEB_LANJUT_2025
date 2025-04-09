@@ -13,7 +13,6 @@ class UserModel extends Authenticatable
 
     protected $table = 'm_user';
     protected $primaryKey = 'user_id';
-
     protected $fillable = [
         'username','password','nama','level_id','created_at','updated_at',
     ];
@@ -25,9 +24,28 @@ class UserModel extends Authenticatable
     protected $casts = [
         'password' => 'hashed',
     ];
-
+    
+    /**
+     * Relasi ke tabel level
+     */
     public function level(): BelongsTo
     {
         return $this->belongsTo(LevelModel::class, 'level_id', 'level_id');
+    }
+
+    /**
+     * Mendapatkan nama role dari relasi level
+     */
+    public function getRoleName(): string
+    {
+        return $this->level ? $this->level->level_nama : '-';
+    }
+
+    /**
+     * Cek apakah user memiliki role tertentu
+     */
+    public function hasRole($role): bool
+    {
+        return $this->level && $this->level->level_kode == $role;
     }
 }
