@@ -131,5 +131,15 @@
           <i class="fas fa-th-large"></i>
         </a>
       </li>
-    </ul>
-  </nav>
+      <li class="nav-item">
+        <a href="{{ url('/logout') }}" class="nav-link"
+            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
+        <form id="logout-form" action="{{ url('/logout') }}" method="GET" style="display: none;">
+            @csrf
+        </form>
+    </li>
+    
+</ul>
+</nav>

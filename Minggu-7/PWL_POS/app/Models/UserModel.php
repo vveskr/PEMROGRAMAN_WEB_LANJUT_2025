@@ -2,19 +2,29 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use App\Models\LevelModel;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class UserModel extends Model
+class UserModel extends Authenticatable
 {
     use HasFactory;
 
-    protected $table = 'm_user'; 
+    protected $table = 'm_user';
     protected $primaryKey = 'user_id';
 
-    protected $fillable = ['level_id', 'username', 'nama', 'password'];
+    protected $fillable = [
+        'username','password','nama','level_id','created_at','updated_at',
+    ];
+
+    // Agar kolom password tidak ditampilkan saat select
+    protected $hidden = ['password'];
+
+    // Otomatis hash password saat diset
+    protected $casts = [
+        'password' => 'hashed',
+    ];
 
     public function level(): BelongsTo
     {

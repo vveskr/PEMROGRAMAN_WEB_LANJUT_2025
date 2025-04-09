@@ -1,4 +1,4 @@
-<form action="{{ url('/level/ajax') }}" method="POST" id="form-tambah">
+<form action="{{ url('/level/ajax') }}" method="POST" id="form-level">
     @csrf
     <div id="modal-master" class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -29,7 +29,7 @@
 </form>
 <script>
     $(document).ready(function() {
-        $("#form-tambah").validate({
+        $("#form-level").validate({
             rules: {
                 level_kode: {required: true, minlength: 3},
                 level_name: {required: true, maxlength: 100}
