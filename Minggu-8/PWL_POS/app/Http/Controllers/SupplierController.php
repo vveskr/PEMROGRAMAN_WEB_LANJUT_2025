@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use Illuminate\Support\Facades\Log;
 
 class SupplierController extends Controller
 {
@@ -259,6 +261,69 @@ class SupplierController extends Controller
                     'status' => false,
                     'message' => 'Data tidak ditemukan'
                 ]);
+            }
+        }
+        return redirect('/');
+    }
+
+    public function import()
+    {
+        return view('supplier.import');
+    }
+    
+    public function import_ajax(Request $request)
+    {
+        if ($request->ajax() || $request->wantsJson()) {
+            $rules = [
+                'file_supplier' => ['required', 'mimes:xlsx,xls', 'max:1024']
+            ];
+            $validator = Validator::make($request->all(), $rules);
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Validasi Gagal',
+                    'msgField' => $validator->errors()
+                ]);
+            }
+
+            try {
+                $file = $request->file('file_supplier');
+                $reader = IOFactory::createReader('Xlsx');
+                $reader->setReadDataOnly(true);
+                $spreadsheet = $reader->load($file->getRealPath());
+                $sheet = $spreadsheet->getActiveSheet();
+                $data = $sheet->toArray(null, false, true, true);
+
+                $insert = [];
+                if (count($data) > 1) {
+                    foreach ($data as $row => $value) {
+                        if ($row > 1) { // Skip header row
+                            $insert[] = [
+                                'supplier_kode' => $value['A'],
+                                'supplier_nama' => $value['B'],
+                                'alamat_supplier' => $value['C'],
+                                'created_at' => now(),
+                            ];
+                        }
+                    }
+                    if (count($insert) > 0) {
+                        SupplierModel::insertOrIgnore($insert);
+                        return response()->json([
+                            'status' => true,
+                            'message' => 'Data berhasil diimport'
+                        ]);
+                    }
+                }
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Tidak ada data yang diimport'
+                ]);
+            } catch (\Exception $e) {
+                Log::error('Supplier Import Error: ' . $e->getMessage());
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Gagal mengunggah file: ' . $e->getMessage()
+                ], 500);
             }
         }
         return redirect('/');
