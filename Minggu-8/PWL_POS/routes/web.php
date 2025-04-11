@@ -76,7 +76,6 @@ Route::middleware(['auth'])->group(function () {
             Route::get('import', [LevelController::class, 'import']); // ajax form upload excel
             Route::post('import_ajax', [LevelController::class, 'import_ajax']); // ajax import excel
             Route::get('export_excel', [LevelController::class, 'export_excel']); //export excel
-                        Route::get('export_excel', [SupplierController::class, 'export_excel']); //export excel
         });
     });
 
@@ -138,7 +137,6 @@ Route::middleware(['auth'])->group(function () {
         });
     });
 
-// artinya semua route di dalam group ini harus punya role ADM (Administrator) dan MNG (Manager)
 // artinya semua route di dalam group ini harus punya role ADM (Administrator) dan MNG (Manager)
     Route::middleware(['authorize:ADM,MNG'])->group(function(){
         Route::group(['prefix' => 'supplier'], function () {
