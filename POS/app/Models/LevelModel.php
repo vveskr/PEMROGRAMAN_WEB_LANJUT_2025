@@ -12,5 +12,5 @@ class LevelModel extends Model
     protected $table = 'm_level'; // Pastikan tabel benar
     protected $primaryKey = 'level_id';
 
-    protected $fillable = ['level_id', 'nama_level'];
+    protected $fillable = ['level_kode', 'level_nama'];
 }
