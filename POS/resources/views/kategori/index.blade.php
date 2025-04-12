@@ -27,7 +27,7 @@
                                 <option value="{{ $item->kategori_id }}">{{ $item->kategori_nama }}</option>
                             @endforeach
                         </select>
-                        <small class="form-text text-muted">Kategori</small>
+                        <small class="form-text text-muted">Kategori Produk</small>
                     </div>
                 </div>
             </div>
@@ -36,9 +36,9 @@
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Kode Kategori</th>
-                    <th>Nama Kategori</th>
-                    <th>Slug Kategori</th>
+                    <th>Kode Kategori Produk</th>
+                    <th>Nama Kategori Produk</th>
+                    <th>Slug Kategori Produk</th>
                     <th>Aksi</th>
                 </tr>
             </thead>

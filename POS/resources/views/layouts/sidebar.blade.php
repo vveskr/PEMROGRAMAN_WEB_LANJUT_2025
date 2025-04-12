@@ -36,7 +36,7 @@
         <li class="nav-item">
           <a href="{{ url('/kategori') }}" class="nav-link {{ ($activeMenu == 'kategori')? 'active' : '' }} ">
             <i class="nav-icon far fa-bookmark"></i>
-            <p>Data Kategori</p>
+            <p>Data Produk</p>
           </a>
         </li>
         <li class="nav-item">

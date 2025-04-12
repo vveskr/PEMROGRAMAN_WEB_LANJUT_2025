@@ -29,7 +29,7 @@
                                 <option value="{{ $item->kategori_id }}">{{ $item->kategori_nama }}</option>
                             @endforeach
                         </select>
-                        <small class="form-text text-muted">Kategori Barang</small>
+                        <small class="form-text text-muted">Kategori Produk</small>
                     </div>
                 </div>
             </div>
@@ -42,7 +42,7 @@
                     <th>Nama Barang</th>
                     <th>Harga Beli</th>
                     <th>Harga Jual</th>
-                    <th>Kategori Barang</th>
+                    <th>Kategori Produk</th>
                     <th>Aksi</th>
                 </tr>
             </thead>

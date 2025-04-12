@@ -44,6 +44,7 @@
             $('#myModal').modal('show');
         });
     }
+    var dataLevel;
     $(document).ready(function() {
         var dataLevel = $('#table_level').DataTable({
             serverSide: true,

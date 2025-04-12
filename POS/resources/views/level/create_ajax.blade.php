@@ -29,7 +29,7 @@
 </form>
 <script>
     $(document).ready(function() {
-        $("#form-tambah").validate({
+        $("#form-level").validate({
             rules: {
                 level_kode: {required: true, minlength: 3},
                 level_nama: {required: true, maxlength: 100}
