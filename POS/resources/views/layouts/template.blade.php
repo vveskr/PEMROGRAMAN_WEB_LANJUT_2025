@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{{ config('app.blade', 'PWL Laravel Starter Code') }}</title>
+  <title>{{ config('app.name', 'PWL Laravel Starter Code') }}</title>
 
   <meta name="csrf-token" content="{{ csrf_token() }}"> <!-- Untuk mengirim token Laravel CSRF pada setiap request ajax-->
 
@@ -18,7 +18,7 @@
   <!-- SweetAlert2 -->
   <link rel="stylesheet" href="{{ asset('adminlte/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css' ) }}">
   <!-- Theme style -->
-  <link rel="stylesheet" href="{{ asset('adminlte/dist/css/adminlte.min.css')}}">
+  <link rel="stylesheet" href="{{asset('adminlte/dist/css/adminlte.min.css')}}">
 
 @stack('css') <!-- Digunakan untuk memanggil custom css dari perintah push('css') pada masing - masing view -->
 </head>
