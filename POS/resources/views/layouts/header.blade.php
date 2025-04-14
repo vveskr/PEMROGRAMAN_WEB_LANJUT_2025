@@ -131,14 +131,39 @@
         <i class="fas fa-th-large"></i>
       </a>
     </li>
-    <!-- Logout Menu -->
-    <li class="nav-item">
-      <a href="#" class="nav-link" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-        <i class="fas fa-sign-out-alt"></i> Logout
+
+    <!-- User profile dropdown -->
+    <li class="nav-item dropdown user-menu">
+      <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
+        <img
+          src="{{ auth()->user()->user_profile_picture ? asset('storage/' . auth()->user()->user_profile_picture) : asset('img/default-profile.png') }}"
+          class="user-image img-circle elevation-1" alt="User Image">
+        <span class="d-none d-md-inline">{{ auth()->user()->nama }}</span>
       </a>
-      <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-        @csrf
-      </form>
+      <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+        <!-- User image -->
+        <li class="user-header bg-primary">
+          <img
+          src="{{ auth()->user()->user_profile_picture ? asset('storage/' . auth()->user()->user_profile_picture) : asset('img/default-profile.png') }}"
+          class="user-image img-circle elevation-1" alt="User Image">
+
+          <p>
+            {{ auth()->user()->nama }}
+            <small>{{ auth()->user()->level->level_nama ?? 'User' }}</small>
+          </p>
+        </li>
+        <!-- Menu Footer-->
+        <li class="user-footer">
+          <a href="{{ url('/profile') }}" class="btn btn-secondary btn-flat">Profile</a>
+          <a href="#" class="btn btn-warning btn-flat float-right"
+            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+            Logout
+          </a>
+          <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+            @csrf
+          </form>
+        </li>
+      </ul>
     </li>
-</ul>
+  </ul>
 </nav>
