@@ -21,7 +21,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->n
 
 // Semua rute di bawah ini hanya bisa diakses jika sudah login
 Route::middleware(['auth'])->group(function () {
-    Route::get('/', [WelcomeController::class, 'index']);
+    Route::get('/', [WelcomeController::class, 'index'])->name('dashboard');
     
     // Semua user dapat melihat profile
     Route::middleware((['authorize:ADM,MNG,STF,KSR']))->group(function(){
