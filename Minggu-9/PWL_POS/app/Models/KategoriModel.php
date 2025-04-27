@@ -5,15 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class KategoriModel extends Model
+class BarangModel extends Model
 {
     use HasFactory;
-    protected $table = 'm_kategori';
-    protected $primaryKey = 'kategori_id';
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = ['kategori_kode', 'kategori_nama'];
+
+    protected $table = 'm_barang'; // Sesuai nama tabel di database
+
+    protected $primaryKey = 'barang_id'; // Primary key
+
+    protected $fillable = [
+        'kategori_id', 
+        'barang_kode', 
+        'barang_nama', 
+        'harga_beli', 
+        'harga_jual'
+    ];
 }
