@@ -32,7 +32,7 @@ class RegisterController extends Controller
             'nama' => $request->nama,
             'password' => bcrypt($request->password),
             'level_id' => $request->level_id,
-            'image' => $request->image
+            'image' => $request->hashName(),
         ]);
 
         // return response JSON if user is created
