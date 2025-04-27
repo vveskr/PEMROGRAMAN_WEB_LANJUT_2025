@@ -7,6 +7,8 @@ use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\LevelController;
 use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\StokController;
+use App\Http\Controllers\PenjualanController;
 use Illuminate\Support\Facades\Route;
 
 Route::pattern('id', '[0-9]+'); // Pastikan parameter {id} hanya berupa angka
@@ -174,6 +176,66 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/store', [SupplierController::class, 'store'])->name('supplier.store');
             Route::get('export_excel', [SupplierController::class, 'export_excel']); //export excel
             Route::get('export_pdf', [SupplierController::class, 'export_pdf']); //export pdf
+        });
+    });
+
+    // Route untuk semua role (ADM, MNG, STF) - Hanya View
+    Route::middleware(['authorize:ADM,MNG,STF'])->group(function () {
+        Route::group(['prefix' => 'stok'], function () {
+            Route::get('/', [StokController::class, 'index']);
+            Route::post('/list', [StokController::class, 'list']); // Gunakan POST untuk DataTables
+            Route::get('/{id}', [StokController::class, 'show']); // Jika ada fitur detail
+        });
+    });
+
+    // Route khusus Admin & Manager (ADM, MNG) - CRUD
+    Route::middleware(['authorize:ADM,MNG'])->group(function () {
+        Route::group(['prefix' => 'stok'], function () {
+            // Create
+            Route::get('/create_ajax', [StokController::class, 'create_ajax']);
+            Route::post('/ajax', [StokController::class, 'store_ajax']);
+
+            // Update
+            Route::get('/{id}/edit_ajax', [StokController::class, 'edit_ajax']);
+            Route::put('/{id}/update_ajax', [StokController::class, 'update_ajax']);
+
+            // Delete
+            Route::get('/{id}/delete_ajax', [StokController::class, 'confirm_ajax']);
+            Route::delete('/{id}/delete_ajax', [StokController::class, 'delete_ajax']);
+
+            // Import & Export 
+            Route::get('/import', [StokController::class, 'import']);
+            Route::post('/import_ajax', [StokController::class, 'import_ajax']);
+            Route::get('/export_excel', [StokController::class, 'export_excel']);
+            Route::get('/export_pdf', [StokController::class, 'export_pdf']);
+        });
+    });
+
+    // Route untuk semua role (ADM, MNG, STF) - Hanya View
+    Route::middleware(['authorize:ADM,MNG,STF'])->group(function () {
+        Route::group(['prefix' => 'penjualan'], function () {
+            Route::get('/', [PenjualanController::class, 'index'])->name('penjualan.index'); // Beri nama
+            Route::post('/list', [PenjualanController::class, 'list'])->name('penjualan.list'); // <-- INI YANG DITAMBAH
+            Route::get('/{id}', [PenjualanController::class, 'show'])->name('penjualan.show');
+        });
+    });
+
+    // Route khusus Admin & Staff/Kasir (ADM, STF) - CRUD
+    Route::middleware(['authorize:ADM,STF'])->group(function () {
+        Route::group(['prefix' => 'penjualan'], function () {
+            // Create
+            Route::get('/create_ajax', [PenjualanController::class, 'create_ajax'])->name('penjualan.create_ajax');
+            Route::post('/ajax', [PenjualanController::class, 'store_ajax'])->name('penjualan.store_ajax');
+
+            // Update
+            Route::get('/{id}/edit_ajax', [PenjualanController::class, 'edit_ajax'])->name('penjualan.edit_ajax');
+            Route::put('/{id}/update_ajax', [PenjualanController::class, 'update_ajax'])->name('penjualan.update_ajax');
+
+            // Delete
+            Route::get('/penjualan/{id}/delete_ajax', [PenjualanController::class, 'confirm_ajax'])
+                ->name('penjualan.confirm_ajax');
+            Route::delete('/penjualan/{id}/delete_ajax', [PenjualanController::class, 'delete_ajax'])
+                ->name('penjualan.delete_ajax');
         });
     });
 });
