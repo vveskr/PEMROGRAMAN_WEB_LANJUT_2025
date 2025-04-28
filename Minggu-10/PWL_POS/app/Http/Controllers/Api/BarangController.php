@@ -15,42 +15,70 @@ class BarangController extends Controller
     }
 
     public function store(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'barang_kode' => 'required|unique:m_barang,barang_kode', // Sesuaikan dengan nama tabel dan kolom
-            'barang_nama' => 'required',
-            'kategori_id' => 'required|exists:m_kategori,kategori_id', // Pastikan kategori_id ada di tabel m_kategori
-            'harga_beli' => 'required|numeric',
-            'harga_jual' => 'required|numeric|gt:harga_beli', // Pastikan harga jual lebih besar dari harga beli
-        ]);
+{
+    $validator = Validator::make($request->all(), [
+        'barang_kode' => 'required|unique:m_barang,barang_kode',
+        'barang_nama' => 'required',
+        'kategori_id' => 'required|exists:m_kategori,kategori_id',
+        'harga_beli' => 'required|numeric',
+        'harga_jual' => 'required|numeric|gt:harga_beli',
+        'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+    ]);
 
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
-        }
-
-        $barang = BarangModel::create($request->all());
-        return response()->json($barang, 201);
+    if ($validator->fails()) {
+        return response()->json($validator->errors(), 422);
     }
+
+    // Upload gambar
+    $image = $request->file('image');
+    $imageName = $image->hashName();
+    $image->store('public/barang'); // disimpan di storage/app/public/barang
+
+    // Create barang
+    $barang = BarangModel::create([
+        'barang_kode' => $request->barang_kode,
+        'barang_nama' => $request->barang_nama,
+        'kategori_id' => $request->kategori_id,
+        'harga_beli' => $request->harga_beli,
+        'harga_jual' => $request->harga_jual,
+        'image' => $imageName,
+    ]);
+
+    return response()->json($barang, 201);
+}
+
+public function update(Request $request, BarangModel $barang)
+{
+    $validator = Validator::make($request->all(), [
+        'barang_kode' => 'sometimes|required|unique:m_barang,barang_kode,'.$barang->barang_id.',barang_id',
+        'barang_nama' => 'sometimes|required',
+        'kategori_id' => 'sometimes|required|exists:m_kategori,kategori_id',
+        'harga_beli' => 'sometimes|required|numeric',
+        'harga_jual' => 'sometimes|required|numeric|gt:harga_beli',
+        'image' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048',
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json($validator->errors(), 422);
+    }
+
+    $data = $request->only(['barang_kode', 'barang_nama', 'kategori_id', 'harga_beli', 'harga_jual']);
+
+    if ($request->hasFile('image')) {
+        // Upload gambar baru
+        $image = $request->file('image');
+        $imageName = $image->hashName();
+        $image->store('public/barang');
+        $data['image'] = $imageName;
+    }
+
+    $barang->update($data);
+
+    return response()->json($barang);
+}
 
     public function show(BarangModel $barang)
     {
-        return response()->json($barang);
-    }
-
-    public function update(Request $request, BarangModel $barang)
-    {
-        $validator = Validator::make($request->all(), [
-            'barang_kode' => 'sometimes|required|unique:m_barang,barang_kode,'.$barang->barang_id.',barang_id', // Sesuaikan nama tabel dan kolom primary key
-            'barang_nama' => 'sometimes|required',
-            'kategori_id' => 'sometimes|required|exists:m_kategori,kategori_id', // Pastikan kategori_id ada di tabel m_kategori
-            'harga_beli' => 'sometimes|required|numeric',
-            'harga_jual' => 'sometimes|required|numeric|gt:harga_beli', // Pastikan harga jual lebih besar dari harga beli
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
-        }
-        $barang->update($request->all());
         return response()->json($barang);
     }
     
